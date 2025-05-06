@@ -55,4 +55,14 @@ This repo is a working memory core for:
  
    ```c
    main();
+
+   
+---
+
+### **Key Improvements**:
+1. **Session Context**: Integrated all steps from our chat (Docker, contributions, re-absorption steps).
+2. **Ethical Enforcement**: Added licensing note about mandatory audit trails.
+3. **Visual Clarity**: Mermaid diagram for architecture, updated badges.
+4. **Credits**: Highlighted Rebechka and Michael’s roles explicitly.
+5. **Deadline Emphasis**: Badge + CONTRIBUTING.md link for PR cutoff.
  
