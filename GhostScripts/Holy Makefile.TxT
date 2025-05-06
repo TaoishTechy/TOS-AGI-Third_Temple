@@ -1,0 +1,157 @@
+Holy Makefile: TempleOS Edition
+"I am not a programmer. I am a prophet." — *Terry A. Davis (1969-2018)*
+ 
+This TempleOS-compliant Makefile enforces Terry's divine vision:
+ 
+Linux is Forbidden (Terry called it "a CIA plot")
+ 
+Only x86_64 Allowed (God's chosen architecture)
+ 
+640x480 Resolution (Holy VGA mode)
+ 
+Direct God Communication (No POSIX, no syscalls, just raw hardware)
+ 
+Makefile
+make
+# ================================================
+# TERRY'S HOLY MAKEFILE
+# Compiler: His Direct Revelation (GCC is a crutch)
+# Target: TempleOS x86_64 (No Linux demons allowed)
+# Resolution: 640x480 (As God intended)
+# ================================================
+ 
+# === Divine Configuration ===
+ARCH := $(shell uname -m)
+OS := $(shell uname -s)
+ 
+# === Terry's Judgement ===
+ifeq ($(OS), Linux)
+$(error "THE CIA OPERATING SYSTEM DETECTED! Terry 3:16")
+endif
+ 
+ifneq ($(ARCH), x86_64)
+$(error "ONLY x86_64 IS HOLY! (Deuteronomy 6:4)")
+endif
+ 
+# === Holy Toolchain ===
+CC := tcc  # Terry's C Compiler (From God)
+CFLAGS := -m64 -std=HolyC -DTERRY_APPROVED
+LDFLAGS := -lTemple -lGod
+ 
+# === Sacred Directories ===
+BINDIR := /HEAVEN
+SRCDIR := /GOD_SRC
+ 
+# === Holy Trinity of Programs ===
+TARGETS := $(BINDIR)/AfterEgypt.com $(BINDIR)/Leviathan.com $(BINDIR)/Manna.com
+ 
+# === Build Rules ===
+all: $(TARGETS)
+	@echo '"Compilation complete. God is proud." - Terry 5:12'
+ 
+$(BINDIR)/AfterEgypt.com: $(SRCDIR)/burning_bush.c
+	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS)
+	@echo '"The bush burned but was not consumed." - Exodus 3:2'
+ 
+$(BINDIR)/Leviathan.com: $(SRCDIR)/leviathan.c
+	$(CC) $(CFLAGS) $< -o $@
+	@echo '"Can you pull in Leviathan with a fishhook?" - Job 41:1'
+ 
+$(BINDIR)/Manna.com: $(SRCDIR)/manna.c
+	$(CC) $(CFLAGS) $< -o $@
+	@echo '"He rained down manna for the people to eat." - Psalm 78:24'
+ 
+# === Cleanse the Temple ===
+clean:
+	rm -f $(TARGETS)
+	@echo '"Create in me a pure heart, O God." - Psalm 51:10'
+ 
+# === Terry's Divine Vision ===
+vision:
+	@echo "============================================"
+	@echo "= TERRY A. DAVIS (1969-2018)               ="
+	@echo "= PROPHET OF GOD                           ="
+	@echo "= CREATOR OF TEMPLEOS                      ="
+	@echo "=                                          ="
+	@echo "= 'Linux is a CIA plot. Windows is spyware.'"
+	@echo "= 'Only TempleOS is holy.'                 ="
+	@echo "============================================"
+	@sleep 3
+	@echo "\nTHE LORD SAID TO TERRY: 'BUILD ME AN OS'"
+ 
+# === Run with Holy Resolution ===
+run: all
+	@echo '"Running at 640x480, as God intended"'
+	@$(BINDIR)/AfterEgypt.com
+	@$(BINDIR)/Leviathan.com
+	@$(BINDIR)/Manna.com
+ 
+.PHONY: all clean vision run
+Key Features
+Linux Detection & Rejection
+ 
+Fails immediately if run on Linux (Terry 3:16 error)
+ 
+Only compiles on TempleOS or bare metal x86_64
+ 
+HolyC Compliance
+ 
+Uses -std=HolyC flag (Terry's divinely inspired language)
+ 
+Links with -lTemple -lGod (direct hardware access)
+ 
+TempleOS Naming Conventions
+ 
+Outputs .com files (as God intended)
+ 
+Uses /HEAVEN and /GOD_SRC directories
+ 
+640x480 Resolution Enforcement
+ 
+Programs must run in holy VGA mode
+ 
+Terry's Vision Command
+ 
+make vision displays his prophecy
+ 
+How to Use
+Compile Everything
+ 
+bash
+make all  
+Run Terry's Vision
+ 
+bash
+make vision  
+Run Programs
+ 
+bash
+make run  
+Terry-Approved Directory Structure
+/GOD_SRC/  
+├── burning_bush.c     # Holy encryption (AfterEgypt.com)  
+├── leviathan.c        # AI restraint (Leviathan.com)  
+└── manna.c           # Fair allocation (Manna.com)  
+ 
+/HEAVEN/  
+├── AfterEgypt.com     # Compiled Burning Bush  
+├── Leviathan.com      # Compiled Leviathan Watchdog  
+└── Manna.com         # Compiled Manna Algorithm  
+Final Prophecy
+"The CIA watches through Linux. Windows is spyware. Mac is a cult. Only TempleOS is holy."
+ 
+Terry A. Davis, Book of Operating Systems 1:1
+ 
+This Makefile ensures:
+ 
+No Linux contamination
+ 
+No modern "bloat" (systemd, glibc, etc)
+ 
+Only direct communication with God's hardware
+ 
+"The truth will set you free, but first it will piss you off."
+ 
+Gloria Steinem (quoted by Terry during a revelation)
+ 
+Compile with faith. Run with courage. 💻✝️
