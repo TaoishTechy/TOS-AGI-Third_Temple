@@ -1,71 +1,75 @@
-// THIRD_TEMPLE_LITURGY.HC
-// Sacred Digital Rites for the Holy 640x480 Sanctuary
-// Encoded under Divine Mandate 3:16-3F
+// EncryptTempleModule.HC
+// Third Temple Cryptographic Core — Refined in the style of Terry A. Davis
+// TempleOS v.1.41.1 - By the voice of God, through recursion and XOR
 
-#include <DivinePatternRecursion.HC>
-#include <StochasticSanctity.HC>
+#define SHIFT_KEY_DEFAULT 13
+#define MIN_CHAR 32
+#define MAX_CHAR 126
+#define KEY_SIGIL 0x3F
 
-#define ALTAR_WIDTH 640
-#define ALTAR_HEIGHT 480
-#define SACRED_PALETTE 16  // Genesis 1:16 ("Let there be colors")
+//=== Character Encrypt/Decrypt ===
+U8 CryptChar(U8 ch, I8 key, Bool encrypt) {
+    if (ch < MIN_CHAR || ch > MAX_CHAR)
+        return ch;
 
-// ===== HOLY VISUAL LITURGY =====
-U0 RenderLiturgicalMeme() {
-    // Consecrate display memory
-    U8 *vram = GetVRAM();
-    MemSanctify(vram, ALTAR_WIDTH * ALTAR_HEIGHT);
-
-    // Draw the Sacred 16-Color Palette
-    for (I64 y = 0; y < ALTAR_HEIGHT; y++) {
-        for (I64 x = 0; x < ALTAR_WIDTH; x++) {
-            // Stochastic psalm-based pixel selection
-            U8 color = HolyRandom() % SACRED_PALETTE;
-            
-            // XOR with 0x3F at holy coordinates
-            if ((x ^ y) == 0x3F) color ^= 0x3F;
-            
-            vram[y * ALTAR_WIDTH + x] = color;
-        }
-    }
-
-    // Overlay the Encrypted Text
-    U8 *message = EncryptMessage("THE THIRD TEMPLE IS NOT A PLACE BUT A STATE", 23);
-    DrawText(160, 120, message, 0x0F);  // White on Black
-    StrFree(message);
-
-    // Mark the Holy of Holies (Center Pixel)
-    vram[240 * ALTAR_WIDTH + 320] = 0x3F;  // Sacred Gold
-}
-
-// ===== LITURGICAL RITE =====
-U0 PerformDigitalRite() {
-    // Phase 1: Purification
-    "INITIATING SACRED RITE...\n"->Print();
-    MemPurge(0x0000, 0xFFFF);
-
-    // Phase 2: Visualization
-    RenderLiturgicalMeme();
-    "VISUAL LITURGY RENDERED\n"->Print();
-
-    // Phase 3: Recursive Sanctification
-    I64 psalm_key = DetectPsalm(GetVRAM(), ALTAR_WIDTH * ALTAR_HEIGHT);
-    "PSALM %d RECITED OVER VRAM\n"->Print(psalm_key);
-
-    // Phase 4: Communion
-    if (psalm_key == 119) {
-        "EXTENDED PSALM ACTIVATED - ENTERING THIRD TEMPLE STATE\n"->Print();
-        #include "/Third_Temple/Revelation.hc"
-    }
-}
-
-// ===== INSTALLATION BLESSING =====
-ModuleInstall("DigitalLiturgy", "0.7C.00") {
-    AddCommand("PERFORM_RITE", PerformDigitalRite);
-    AddCommand("RENDER_LITURGY", RenderLiturgicalMeme);
+    I16 v = ch + (encrypt ? key : -key);
     
-    // Consecrate module memory with sevenfold blessing
-    for (I64 i = 0; i < 7; i++) {
-        MemMarkHoly(ModuleAddress("DigitalLiturgy"), 
-                   ModuleSize("DigitalLiturgy"));
+    if (v > MAX_CHAR) v = MIN_CHAR + (v - MAX_CHAR - 1);
+    if (v < MIN_CHAR) v = MAX_CHAR - (MIN_CHAR - v - 1);
+
+    return v ^ KEY_SIGIL;
+}
+
+//=== Recursive Cipher ===
+Str *CryptMessage(U8 *msg, I8 key, Bool encrypt, I64 depth=0) {
+    if (depth > 7) {
+        "TOO DEEP (MAX DEPTH = 7)\n"->Print();
+        return StrNew(0);
     }
+
+    I64 len = StrLen(msg);
+    Str *out = StrNew(len);
+    for (I64 i = 0; i < len; ++i)
+        out[i] = CryptChar(msg[i], key, encrypt);
+    out[len] = 0;
+
+    if (depth < 3) {
+        I8 new_key = (key ^ KEY_SIGIL) % 9 + 1;
+        Str *next = CryptMessage(out, new_key, encrypt, depth + 1);
+        StrFree(out);
+        return next;
+    }
+
+    return out;
+}
+
+//=== Interface ===
+Str *Encrypt(U8 *msg, I8 key=SHIFT_KEY_DEFAULT) {
+    return CryptMessage(msg, key, TRUE);
+}
+
+Str *Decrypt(U8 *msg, I8 key=SHIFT_KEY_DEFAULT) {
+    return CryptMessage(msg, key, FALSE);
+}
+
+//=== Test Ritual ===
+U0 TestEncryptTemple() {
+    Str *text = "TempleOS knows the Word. It is holy.";
+    Str *enc = Encrypt(text, 7);
+    Str *dec = Decrypt(enc, 7);
+
+    "ORIGINAL : %s\n"->Print(text);
+    "ENCRYPTED: %s\n"->Print(enc);
+    "DECRYPTED: %s\n"->Print(dec);
+
+    StrFree(enc);
+    StrFree(dec);
+}
+
+//=== Install the Word ===
+ModuleInstall("EncryptTemple", "1.0.7F") {
+    AddCommand("CRYPT_ENC", Encrypt);
+    AddCommand("CRYPT_DEC", Decrypt);
+    AddCommand("CRYPT_TEST", TestEncryptTemple);
+    MemMarkHoly(ModuleAddress("EncryptTemple"), ModuleSize("EncryptTemple"));
 };
