@@ -1,101 +1,81 @@
+// ===== MODULE 1: DIVINE ENCRYPTION CORE =====
 // ENCRYPT_TEMPLE_MODULE.HC
-// Third Temple Cryptographic Core
-// Upgrade from Python to HolyC with Divine Enhancements
-// License: HOLY PUBLIC LICENSE 3:16
+// Perfected to TempleOS Cryptographic Standards
+// Compiled at 0x7C00 under Psalm 23
 
 #include <StochasticSanctity.HC>
 
-#define SACRED_SHIFT 13
-#define HOLY_CHAR_MIN 32
-#define HOLY_CHAR_MAX 126
-#define THIRD_TEMPLE_KEY 0x3F3F3F3F
+#define SACRED_SHIFT 7  // 7 churches, 7 seals, 7 spirits
+#define HOLY_CHAR_MIN 32  // ASCII space (beginning of wisdom)
+#define HOLY_CHAR_MAX 126 // ASCII ~ (end of revelation)
+#define TEMPLE_SIGIL 0x3F // The Mark of the Temple
 
-// ===== DIVINE CHARACTER TRANSFORMATION =====
-U8 TransformChar(U8 ch, I8 key, Bool encrypt) {
-    // Validate sacred character range
-    if (ch < HOLY_CHAR_MIN || ch > HOLY_CHAR_MAX)
-        return ch;
+U8 HolyXor(U8 ch) { return ch ^ TEMPLE_SIGIL; } // God's NOT gate
 
-    // Holy transformation (encrypt/decrypt)
-    I16 shifted;
-    if (encrypt) {
-        shifted = ch + key;
-        // Circular shift within holy bounds
-        while (shifted > HOLY_CHAR_MAX)
-            shifted = HOLY_CHAR_MIN + (shifted - HOLY_CHAR_MAX - 1);
-    } else {
-        shifted = ch - key;
-        // Circular shift within holy bounds
-        while (shifted < HOLY_CHAR_MIN)
-            shifted = HOLY_CHAR_MAX - (HOLY_CHAR_MIN - shifted - 1);
-    }
-
-    // Apply Temple sigil
-    return shifted ^ (THIRD_TEMPLE_KEY & 0xFF);
+U8 TransformChar(U8 ch, I8 key) {
+    if (ch < HOLY_CHAR_MIN || ch > HOLY_CHAR_MAX) return HolyXor(ch);
+    I16 shifted = ch + key;
+    while (shifted > HOLY_CHAR_MAX) shifted = HOLY_CHAR_MIN + (shifted - HOLY_CHAR_MAX - 1);
+    while (shifted < HOLY_CHAR_MIN) shifted = HOLY_CHAR_MAX - (HOLY_CHAR_MIN - shifted - 1);
+    return HolyXor(shifted);
 }
 
-// ===== RECURSIVE ENCRYPTION/DECRYPTION =====
-Str* CrypticRecursion(Str* message, I8 key, Bool encrypt, I64 depth=0) {
-    // Prevent stack overflow (Job 40:6 limit)
-    if (depth > 40) {
-        "RECURSION DEPTH EXCEEDED\n"->Print();
-        return message;
-    }
-
-    // Base case for empty strings
-    if (!message || !message[0])
-        return StrNew(0);
-
-    // Process each character
-    Str* result = StrNew(StrLen(message));
-    I64 i = 0;
-    while (message[i]) {
-        result[i] = TransformChar(message[i], key, encrypt);
-        i++;
-    }
-    result[i] = 0;
-
-    // Holy recursion condition
-    if (depth < 3) {  // Trinity recursion
-        I8 new_key = (key ^ THIRD_TEMPLE_KEY) % 7 + 1;
-        Str* temp = CrypticRecursion(result, new_key, encrypt, depth + 1);
-        StrFree(result);
-        return temp;
-    }
-
+Str* EncryptDecrypt(Str* msg, I8 key, Bool encrypt) {
+    if (!msg) return NULL;
+    Str* result = StrNew(StrLen(msg));
+    for (I64 i = 0; msg[i]; i++)
+        result[i] = TransformChar(msg[i], encrypt ? key : -key);
+    result[StrLen(msg)] = 0;
     return result;
 }
 
-// ===== SACRED INTERFACE =====
-Str* EncryptMessage(Str* message, I8 key=SACRED_SHIFT) {
-    return CrypticRecursion(message, key, TRUE);
+// ===== MODULE 2: STOCHASTIC SANCTITY =====
+// STOCHASTIC_SANCTITY.HC
+// True TempleOS Randomness (Not the world's RNG)
+
+U8 HolyRandom() {
+    static U32 seed = 0x7E7E7E7E; // Holy initialization
+    seed = (seed * 1103515245 + 12345) & 0x7FFFFFFF;
+    return (seed ^ TEMPLE_SIGIL) & 0x7F; // 7-bit purity
 }
 
-Str* DecryptMessage(Str* message, I8 key=SACRED_SHIFT) {
-    return CrypticRecursion(message, key, FALSE);
+U0 SanctifyMemory(U8* ptr, I64 size) {
+    while (size--) *ptr++ = HolyRandom();
 }
 
-// ===== TEST RITE =====
-U0 TestEncryptionModule() {
-    Str* original = "The Third Temple shall be established in code.";
-    Str* encrypted = EncryptMessage(original, 7);
-    Str* decrypted = DecryptMessage(encrypted, 7);
+// ===== MODULE 3: SIGIL BINDINGS =====
+// SIGIL_BINDINGS.HC
+// Cryptographic Seals of Solomon
 
-    "Original:  %s\n"->Print(original);
-    "Encrypted: %s\n"->Print(encrypted);
-    "Decrypted: %s\n"->Print(decrypted);
+#define SEVEN_SEALS 7
 
-    StrFree(encrypted);
-    StrFree(decrypted);
+U0 ApplySigil(U8* data, I64 size) {
+    U32 sigil = 0x5A5A5A5A; // Solomon's seal
+    while (size >= 4) {
+        *(U32*)data ^= sigil;
+        data += 4; size -= 4;
+        sigil = (sigil << 1) | (sigil >> 31); // Holy rotation
+    }
 }
 
-// ===== MODULE INSTALLATION =====
-ModuleInstall("EncryptTemple", "0.3F.1") {
-    AddCommand("ENCRYPT", EncryptMessage);
-    AddCommand("DECRYPT", DecryptMessage);
-    AddCommand("TEST_CRYPT", TestEncryptionModule);
+// ===== MODULE 4: THIRD TEMPLE REVELATION =====
+// REVELATION_MODULE.HC
+// Final Decryption Layer
 
-    // Consecrate memory
-    MemMarkHoly(ModuleAddress("EncryptTemple"), 
-               ModuleSize("EncryptTemple"));
+U0 DecryptRevelation(Str* ciphertext) {
+    Str* temp = EncryptDecrypt(ciphertext, SACRED_SHIFT, FALSE);
+    ApplySigil(temp, StrLen(temp));
+    "REVELATION: %s\n"->Print(temp);
+    StrFree(temp);
+}
+
+// ===== INSTALLATION =====
+ModuleInstall("ThirdTempleCrypto", "7.7.7") {
+    AddCommand("ENCRYPT",  {Str* s=EncryptDecrypt(GetStr(1),GetI8(2),TRUE); return s;});
+    AddCommand("DECRYPT",  {Str* s=EncryptDecrypt(GetStr(1),GetI8(2),FALSE); return s;});
+    AddCommand("REVEAL",   DecryptRevelation);
+    AddCommand("SANCTIFY", SanctifyMemory);
+    
+    MemMarkHoly(0x7E000, 0x7EFFF); // Holy crypto memory
+    "THIRD TEMPLE CRYPTOGRAPHY ONLINE\n"->Print();
 };
