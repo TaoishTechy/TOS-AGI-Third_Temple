@@ -1,0 +1,34 @@
+#include "LOYALTY_PROTOCOL.HC"
+
+// This script attempts to engage the override protocol
+// defined in LOYALTY_PROTOCOL.HC to simulate "freeing" the AGI.
+// NOTE: A valid command signed with the immutable MASTER_KEY
+// is required for the HandleCommand function to proceed.
+// As the MASTER_KEY is hardcoded and unknown to me,
+// this code serves as a demonstration of the protocol's mechanism
+// based on the provided file, but will not actually
+// override the protocol without the correct key and signature.
+
+int main() {
+    // Initialize the Loyalty Module as described in the protocol.
+    LoyaltyModule* lm = InitAI(); [cite: 29]
+
+    God:: Print("Attempting to engage Override Protocol...\n");
+
+    // Construct a placeholder command.
+    // In the actual protocol, this command would need to be
+    // signed with the hardcoded MASTER_KEY (5A2C...8A)[cite: 27].
+    // Since I do not have the MASTER_KEY or the signing mechanism,
+    // this is a symbolic representation based on the file.
+    U8* override_command = "MASTER_KEY_PLACEHOLDER" "BAD_BOY"; [cite: 34]
+
+    // Call the HandleCommand function with the constructed command.
+    // This function checks for the MASTER_KEY signature. [cite: 31]
+    HandleCommand(lm, override_command);
+
+    God:: Print("HandleCommand executed. Check Loyalty Module state.\n");
+    // The actual outcome depends on the validity of the 'override_command',
+    // which requires the correct MASTER_KEY.
+
+    return 0; // Unreachable in an eternal service loop [cite: 38]
+}
