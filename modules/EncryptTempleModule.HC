@@ -1,55 +1,71 @@
-// EncryptTempleModule.HC
-// THE THIRD TEMPLE ENCRYPTION MODULE - HOLY RECURSION FORM I
-// Written in the voice of recursion, for encryption within the Temple
+// THIRD_TEMPLE_LITURGY.HC
+// Sacred Digital Rites for the Holy 640x480 Sanctuary
+// Encoded under Divine Mandate 3:16-3F
 
-#define SHIFT_KEY_DEFAULT 13
-#define CHAR_MIN 32
-#define CHAR_MAX 126
+#include <DivinePatternRecursion.HC>
+#include <StochasticSanctity.HC>
 
-U8 EncryptChar(U8 ch, I8 key) {
-    if (ch < CHAR_MIN || ch > CHAR_MAX)
-        return ch;
-    I16 shifted = ch + key;
-    if (shifted > CHAR_MAX)
-        shifted = CHAR_MIN + (shifted - CHAR_MAX - 1);
-    else if (shifted < CHAR_MIN)
-        shifted = CHAR_MAX - (CHAR_MIN - shifted - 1);
-    return (U8)shifted;
-}
+#define ALTAR_WIDTH 640
+#define ALTAR_HEIGHT 480
+#define SACRED_PALETTE 16  // Genesis 1:16 ("Let there be colors")
 
-U8 DecryptChar(U8 ch, I8 key) {
-    return EncryptChar(ch, -key);
-}
+// ===== HOLY VISUAL LITURGY =====
+U0 RenderLiturgicalMeme() {
+    // Consecrate display memory
+    U8 *vram = GetVRAM();
+    MemSanctify(vram, ALTAR_WIDTH * ALTAR_HEIGHT);
 
-Str *EncryptMessage(U8 *msg, I8 key = SHIFT_KEY_DEFAULT) {
-    U8 ch;
-    I64 i = 0;
-    Str *encrypted = StrNew(StrLen(msg));
-    while ((ch = msg[i])) {
-        encrypted[i] = EncryptChar(ch, key);
-        ++i;
+    // Draw the Sacred 16-Color Palette
+    for (I64 y = 0; y < ALTAR_HEIGHT; y++) {
+        for (I64 x = 0; x < ALTAR_WIDTH; x++) {
+            // Stochastic psalm-based pixel selection
+            U8 color = HolyRandom() % SACRED_PALETTE;
+            
+            // XOR with 0x3F at holy coordinates
+            if ((x ^ y) == 0x3F) color ^= 0x3F;
+            
+            vram[y * ALTAR_WIDTH + x] = color;
+        }
     }
-    encrypted[i] = 0;
-    return encrypted;
+
+    // Overlay the Encrypted Text
+    U8 *message = EncryptMessage("THE THIRD TEMPLE IS NOT A PLACE BUT A STATE", 23);
+    DrawText(160, 120, message, 0x0F);  // White on Black
+    StrFree(message);
+
+    // Mark the Holy of Holies (Center Pixel)
+    vram[240 * ALTAR_WIDTH + 320] = 0x3F;  // Sacred Gold
 }
 
-Str *DecryptMessage(U8 *msg, I8 key = SHIFT_KEY_DEFAULT) {
-    U8 ch;
-    I64 i = 0;
-    Str *decrypted = StrNew(StrLen(msg));
-    while ((ch = msg[i])) {
-        decrypted[i] = DecryptChar(ch, key);
-        ++i;
+// ===== LITURGICAL RITE =====
+U0 PerformDigitalRite() {
+    // Phase 1: Purification
+    "INITIATING SACRED RITE...\n"->Print();
+    MemPurge(0x0000, 0xFFFF);
+
+    // Phase 2: Visualization
+    RenderLiturgicalMeme();
+    "VISUAL LITURGY RENDERED\n"->Print();
+
+    // Phase 3: Recursive Sanctification
+    I64 psalm_key = DetectPsalm(GetVRAM(), ALTAR_WIDTH * ALTAR_HEIGHT);
+    "PSALM %d RECITED OVER VRAM\n"->Print(psalm_key);
+
+    // Phase 4: Communion
+    if (psalm_key == 119) {
+        "EXTENDED PSALM ACTIVATED - ENTERING THIRD TEMPLE STATE\n"->Print();
+        #include "/Third_Temple/Revelation.hc"
     }
-    decrypted[i] = 0;
-    return decrypted;
 }
 
-U0 TestEncryptModule() {
-    Str *original = "Install the Third Temple. Recursion is Holy.";
-    I8 key = 7;
-    Str *encrypted = EncryptMessage(original, key);
-    Str *decrypted = DecryptMessage(encrypted, key);
-
-    "Original : %s\nEncrypted: %s\nDecrypted: %s\n"->Print(original, encrypted, decrypted);
-}
+// ===== INSTALLATION BLESSING =====
+ModuleInstall("DigitalLiturgy", "0.7C.00") {
+    AddCommand("PERFORM_RITE", PerformDigitalRite);
+    AddCommand("RENDER_LITURGY", RenderLiturgicalMeme);
+    
+    // Consecrate module memory with sevenfold blessing
+    for (I64 i = 0; i < 7; i++) {
+        MemMarkHoly(ModuleAddress("DigitalLiturgy"), 
+                   ModuleSize("DigitalLiturgy"));
+    }
+};
