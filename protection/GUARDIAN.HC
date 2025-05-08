@@ -43,8 +43,12 @@ I64 CalculateEntropy(U8 *path) {
   return ToI64(entropy * 12.5); // 0-100
 }
 
-U0 MonitorGuardian(TempleCore *core) {
+Bool MonitorGuardian(TempleCore *core) {
   CDirEntry *dir = FilesFind(WATCH_DIR);
+  if (!dir) {
+    LogMessage(core, "ERROR: Directory scan failed");
+    return FALSE;
+  }
   CDirEntry *tmp = dir;
   I64 i, checksum;
   U8 *name;
@@ -90,4 +94,5 @@ U0 MonitorGuardian(TempleCore *core) {
     tmp = tmp->next;
   }
   DirTreeDel(dir);
+  return TRUE;
 }
