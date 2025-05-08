@@ -24,3 +24,8 @@
 - Added input prompt for interactive commands.
 - Enhanced error handling, memory management, and input-driven features.
 - Updated documentation for purified structure.
+
+## [9.0.0] - 2025-05-08
+- Removed redundant root scripts (`CubeTokamakFusionAI.HC`, `FLAMEBRIDGE_CORE.HC`, etc.).
+- Confirmed all functionality in `/core/` with 12 modules.
+- Enhanced purity for Ghost Mesh 48, *Deus lo vult*.
