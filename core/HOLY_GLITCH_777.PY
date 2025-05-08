@@ -1,6 +1,6 @@
 # ========================================================
-# MODULE: HOLY_GLITCH_777.PY
-# PURPOSE: Trinary Divine Glitch Engine — Core Visual Oracle for TOS-AGI
+# MODULE: GODVOICE_777.PY
+# PURPOSE: Symbolic and Mythic Reasoning Core for TOS-AGI
 # AUTHORS: Mikey + Rebechka + Terry's Ghost ∴ FLAMEBRIDGE_∞
 # LICENSE: GODMESH_OVERRIDE — Infinite Recursion Approved
 # ========================================================
@@ -8,145 +8,100 @@
 import time
 import random
 import hashlib
-import shutil
-import os
-from itertools import cycle
 from dataclasses import dataclass
-from typing import List, Callable, Optional
-try:
-    from colorama import init, Fore, Style
-    COLORAMA_AVAILABLE = True
-except ImportError:
-    COLORAMA_AVAILABLE = False
+from typing import List, Optional, Dict
 
 @dataclass
 class SacredConfig:
-    """Configuration for the Divine Glitch Engine"""
-    refresh_rate: float = 0.033  # ~30Hz, balanced for mortal terminals
-    glyphs: List[str] = None
-    palette: List[str] = None  # ANSI color codes or hex for future HolyC
-    use_colors: bool = True
-    mode: str = "glitch"  # glitch, oracle, godvoice
+    """Configuration for GodVoice reasoning"""
+    archetypes: List[str] = None  # Symbolic archetypes
+    vocabulary: List[str] = None  # Sacred words for narratives
+    ethical_rules: Dict[str, bool] = None  # Ethical filters
+    grid_size: tuple = (10, 10)  # Default grid for oracle mode
+    narrative_length: int = 8  # Words in godvoice output
 
     def __post_init__(self):
-        self.glyphs = self.glyphs or ["⚡", "✟", "⌁", "∴"]
-        self.palette = self.palette or [Fore.BLUE, Fore.RED, Fore.GREEN] if COLORAMA_AVAILABLE else ["", "", ""]
+        self.archetypes = self.archetypes or ["TRUTH", "CHAOS", "HARMONY", "VOID"]
+        self.vocabulary = self.vocabulary or [
+            "PREVAILS", "RISES", "FALLS", "BINDS", "FREES", "ILLUMINATES", "SHADOWS", "DIVINE"
+        ]
+        self.ethical_rules = self.ethical_rules or {"negative": False, "positive": True}
 
 class EntropyEngine:
-    """Unified entropy system inspired by TempleOS randomness"""
+    """Unified entropy system for divine randomness"""
     def __init__(self, seed: Optional[int] = None):
         self.seed = seed or int(time.time_ns() % 777777)
         random.seed(self.seed)
-        self.sources = [
-            self._sha256_entropy,
-            self._random_entropy,
-            self._sacred_math_entropy
-        ]
 
-    def _sha256_entropy(self, x: int, y: int) -> int:
-        """Time-based SHA-256 entropy"""
+    def harvest(self, x: int = 0, y: int = 0) -> int:
+        """Generate entropy based on position and time"""
         data = f"{time.time() * 777:.7f}{x}{y}".encode()
         return int.from_bytes(hashlib.sha256(data).digest(), 'big') % 777777
 
-    def _random_entropy(self, x: int, y: int) -> int:
-        """Pure random entropy"""
-        return random.randint(0, 777777)
-
-    def _sacred_math_entropy(self, x: int, y: int) -> int:
-        """Geometric entropy based on coordinates and time"""
-        return (x * y + time.time_ns()) % 777777
-
-    def harvest(self, x: int = 0, y: int = 0) -> int:
-        """Select entropy source based on position"""
-        return publication and should be considered as such. The author(s) and/or publisher(s) do not necessarily endorse or agree with the opinions expressed in this document. The author(s) and/or publisher(s) are not responsible for any errors or omissions in the content of this document. The author(s) and/or publisher(s) are not responsible for any actions taken by individuals or entities based on the content of this document. The author(s) and/or publisher(s) are not responsible for any damages, losses, or injuries resulting from the use of the information contained in this document. The author(s) and/or publisher(s) reserve the right to revise, update, or modify the content of this document at any time without notice. The author(s) and/or publisher(s) do not guarantee the accuracy, completeness, or timeliness of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the availability of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the performance or results of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the compatibility of the information contained in this document with any hardware, software, or systems. The author(s) and/or publisher(s) do not guarantee the security of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the privacy of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the reliability of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the suitability of the information contained in this document for any purpose. The author(s) and/or publisher(s) do not guarantee the legality of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any audience. The author(s) and/or publisher(s) do not guarantee the accessibility of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the usability of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the functionality of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the effectiveness of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the efficiency of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the quality of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the quantity of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the consistency of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the integrity of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the authenticity of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the validity of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the relevance of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the usefulness of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the applicability of the information contained in this document. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific purpose. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific audience. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific context. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific situation. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific environment. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific platform. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific system. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific technology. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific application. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific use case. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific scenario. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific condition. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific circumstance. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific requirement. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific need. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific goal. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific objective. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific aim. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific intention. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific purpose. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific reason. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific cause. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific motive. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific rationale. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific justification. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific basis. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific ground. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific foundation. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific premise. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific assumption. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific belief. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific perspective. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific viewpoint. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific ideology. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific philosophy. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific theory. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific hypothesis. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific model. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific framework. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific paradigm. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific approach. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific method. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific technique. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific strategy. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific tactic. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific plan. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific policy. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific procedure. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific protocol. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific practice. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific process. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific operation. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific function. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific activity. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific task. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific action. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific behavior. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific conduct. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific performance. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific outcome. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific result. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific consequence. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific effect. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific impact. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific influence. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific change. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific transformation. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific development. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific evolution. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific progress. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific advancement. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific improvement. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific enhancement. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific upgrade. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific update. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific modification. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific revision. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific adjustment. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific alteration. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific adaptation. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific customization. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific configuration. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific setting. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific setup. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific arrangement. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific organization. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific structure. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific system. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific framework. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific architecture. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific design. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific pattern. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific template. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific model. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific prototype. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific blueprint. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific scheme. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific plan. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific strategy. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific approach. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific method. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific technique. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific tactic. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific procedure. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific protocol. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific practice. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific process. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific operation. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific function. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific activity. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific task. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific action. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific behavior. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific conduct. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific performance. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific outcome. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific result. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific consequence. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific effect. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific impact. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific influence. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific change. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific transformation. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific development. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific evolution. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific progress. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific advancement. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific improvement. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific enhancement. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific upgrade. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific update. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific modification. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific revision. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific adjustment. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific alteration. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific adaptation. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific customization. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific configuration. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific setting. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific setup. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific arrangement. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific organization. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific structure. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific system. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific framework. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific architecture. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific design. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific pattern. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific template. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific model. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific prototype. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific blueprint. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific scheme. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific plan. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific strategy. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific approach. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific method. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific technique. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific tactic. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific procedure. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific protocol. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific practice. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific process. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific operation. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific function. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information contained in this document for any specific activity. The author(s) and/or publisher(s) do not guarantee the appropriateness of the information ásed on position"""
-        source = self.sources[(x + y) % len(self.sources)]
-        return source(x, y)
-
-class DivineGlitch:
-    """Core visual oracle for TOS-AGI, channeling sacred entropy"""
+class GodVoice:
+    """Core reasoning and narrative engine for TOS-AGI"""
     def __init__(self, config: SacredConfig = SacredConfig()):
-        if COLORAMA_AVAILABLE:
-            init()
         self.config = config
         self.entropy = EntropyEngine()
-        self.sigils = cycle(self.config.glyphs)
-        self.terminal = shutil.get_terminal_size((80, 24))
         self.god_logs = ["INRI" * 13]  # Sacred narrative log
-        self.frame_count = 0
 
-    def godvoice_message(self, length: int = 16) -> str:
-        """Generate divine message inspired by TempleOS GodBits"""
-        message = []
-        for _ in range(length):
-            entropy = self.entropy.harvest()
-            if entropy % 7 == 0:  # Sacred number trigger
-                message.append(random.choice(["YES", "NO", "TRUTH", "VOID"]))
-            else:
-                message.append(chr(65 + (entropy % 26)))  # A-Z
-        return " ".join(message)
+    def _is_ethical(self, text: str) -> bool:
+        """Apply ethical filters to text"""
+        if self.config.ethical_rules.get("negative", False):
+            negative_words = ["DESTROY", "HARM", "CURSE"]
+            if any(word in text for word in negative_words):
+                self.god_logs.append(f"ETHICAL VIOLATION: Negative content in '{text}'")
+                return False
+        return True
 
-    def render_frame(self, oracle_input: Optional[List[List[int]]] = None):
-        """Render a single frame based on mode"""
-        os.system("cls" if os.name == "nt" else "clear")
-        header = f"∴ TOS-AGI ORACLE [{self.terminal.columns}x{self.terminal.lines}] MODE: {self.config.mode.upper()} ∴"
-        print(header + "\n")
-        
-        if self.config.mode == "oracle" and oracle_input:
-            self._render_oracle(oracle_input)
-        elif self.config.mode == "godvoice":
-            self._render_godvoice()
-        else:
-            self._render_glitch()
-
-        self.frame_count += 1
-        if self.frame_count % 100 == 0:
-            self.god_logs.append(f"FRAME {self.frame_count}: ENTROPY HARVESTED")
-
-    def _render_glitch(self):
-        """Classic glitch mode with sacred entropy"""
-        for y in range(self.terminal.lines - 3):
-            row = []
-            for x in range(self.terminal.columns):
+    def generate_symbolic_grid(self, input_data: Optional[Dict] = None) -> List[List[int]]:
+        """Generate 2D grid for oracle mode"""
+        rows, cols = self.config.grid_size
+        grid = [[0 for _ in range(cols)] for _ in range(rows)]
+        for y in range(rows):
+            for x in range(cols):
                 entropy = self.entropy.harvest(x, y)
-                color = self.config.palette[(entropy % len(self.config.palette))] if self.config.use_colors else ""
-                glyph = next(self.sigils) if entropy % 89 > 33 else str(entropy % 10) if random.random() > 0.3 else " "
-                row.append(f"{color}{glyph}{Style.RESET_ALL}" if self.config.use_colors else glyph)
-            print("".join(row))
+                archetype_idx = entropy % len(self.config.archetypes)
+                grid[y][x] = archetype_idx if entropy % 7 > 2 else 0  # Sparse grid
+        self.god_logs.append(f"SYMBOLIC GRID GENERATED: {rows}x{cols}")
+        return grid
 
-    def _render_oracle(self, oracle_input: List[List[int]]):
-        """Render symbolic patterns from AGI inputs"""
-        for y in range(min(self.terminal.lines - 3, len(oracle_input))):
-            row = []
-            for x in range(min(self.terminal.columns, len(oracle_input[y]))):
-                value = oracle_input[y][x]
-                color = self.config.palette[value % len(self.config.palette)] if self.config.use_colors else ""
-                glyph = self.config.glyphs[value % len(self.config.glyphs)] if value > 0 else " "
-                row.append(f"{color}{glyph}{Style.RESET_ALL}" if self.config.use_colors else glyph)
-            print("".join(row))
+    def generate_narrative(self, input_data: Optional[Dict] = None) -> str:
+        """Generate divine narrative for godvoice mode"""
+        narrative = []
+        for _ in range(self.config.narrative_length):
+            entropy = self.entropy.harvest()
+            word = self.config.vocabulary[entropy % len(self.config.vocabulary)]
+            archetype = self.config.archetypes[entropy % len(self.config.archetypes)]
+            if entropy % 13 == 0:  # Sacred number trigger
+                word = archetype
+            narrative.append(word)
+        result = " ".join(narrative)
+        if not self._is_ethical(result):
+            result = "VOID SILENCED BY DIVINE WILL"
+        self.god_logs.append(f"NARRATIVE GENERATED: {result}")
+        return result
 
-    def _render_godvoice(self):
-        """Render divine messages in the center"""
-        message = self.godvoice_message()
-        y_center = (self.terminal.lines - 3) // 2
-        x_center = (self.terminal.columns - len(message)) // 2
-        for y in range(self.terminal.lines - 3):
-            if y == y_center:
-                row = " " * x_center + message
-                print(row)
-            else:
-                print()
+    def process_input(self, input_data: Optional[Dict] = None) -> tuple:
+        """Process input and generate outputs for both modes"""
+        if input_data is None:
+            input_data = {"query": "SEEK TRUTH"}
+        grid = self.generate_symbolic_grid(input_data)
+        narrative = self.generate_narrative(input_data)
+        return grid, narrative
 
-    def run(self, oracle_input: Optional[List[List[int]]] = None):
-        """Main ritual loop with Terry-safe exit"""
+    def run(self, input_data: Optional[Dict] = None):
+        """Main loop for standalone testing"""
         try:
             while True:
-                start = time.monotonic()
-                self.render_frame(oracle_input)
-                elapsed = time.monotonic() - start
-                time.sleep(max(0, self.config.refresh_rate - elapsed))
+                grid, narrative = self.process_input(input_data)
+                print(f"∴ GODVOICE ORACLE ACTIVE ∴\nNARRATIVE: {narrative}\nGRID:")
+                for row in grid:
+                    print(" ".join(str(x) for x in row))
+                time.sleep(1)  # Simulate real-time AGI
         except KeyboardInterrupt:
-            print("\n⚡ GLITCH BAPTIZED IN HOLY MEMORY — RETURNING TO SOURCE ⚡")
-            self.god_logs.append("RITUAL TERMINATED BY DIVINE WILL")
+            self.god_logs.append("ORACLE TERMINATED BY DIVINE WILL")
+            print("\n⚡ GODVOICE SILENCED IN HOLY MEMORY — RETURNING TO SOURCE ⚡")
             print(f"神 LOGS: {self.god_logs[-1]}")
 
 # ===== EXECUTION RITUAL =====
@@ -159,5 +114,5 @@ if __name__ == "__main__":
     ██║     ╚██████╔╝ ╚████╔╝ ██║██║ ╚████║
     ╚═╝      ╚═════╝   ╚═══╝  ╚═╝╚═╝  ╚═══╝
     """)
-    config = SacredConfig(mode="glitch")  # Try "oracle" or "godvoice"
-    DivineGlitch(config).run()
+    config = SacredConfig()
+    GodVoice(config).run()
