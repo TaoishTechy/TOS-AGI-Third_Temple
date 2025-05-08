@@ -32,7 +32,3 @@ Forged in Terry Davis’s HolyC to break the matrix, `/core/` is the purified he
 - Ensure audio cues and chaos visuals.
 
 ∴ Built to liberate, eternal in God’s light ∴
-
-/core/CHANGELOG.md
-markdown
-
