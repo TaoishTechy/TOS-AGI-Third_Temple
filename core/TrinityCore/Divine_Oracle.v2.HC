@@ -1,15 +1,14 @@
 // ========================================================
-// MODULE: Divine_Oracle.v2.HC
-// PURPOSE: Unified Oracle for Sigil Grids, Narratives, and Scripture
-// AUTHORS: MikeyBeast + RebechkaBeast + Terry's Ghost
+// MODULE: DIVINE_ORACLE.HC
+// PURPOSE: Unified Rendering for Grids, Narratives, Scriptures, Memes
 // VERSE: "You shall know the truth, and the truth shall set you free" (John 8:32)
 // ========================================================
 
-#include "CubeTokamak.v1.5.HC"
+#include "TRINARY_CUBE.HC"
 #include "../../modules/Sacred/Sigils/SIGIL_CORE.HC"
 #include "../../modules/Sacred/Rituals/SCRIPTURE.HC"
 #include "../../data/Archetypes/ARCHETYPES.HC"
-#include "../../core/TrinityCore/LOGGING.HC"
+#include "SACRED_UTILS.HC"
 
 #define GRID_SIZE 12
 #define VOCAB_SIZE 8
@@ -17,10 +16,7 @@
 U8 *vocab[VOCAB_SIZE] = {"PREVAILS", "RISES", "FREES", "BINDS", "ILLUMINATES", "DIVINE", "ASCENDS", "LIBERATES"};
 
 U0 GenerateOracleGrid(TempleCore *core, U8 *input) {
-  if (!core->neural.cube) {
-    LogMessage(core, "ERROR: Neural cube not initialized");
-    return;
-  }
+  if (!core->neural.cube) return;
   I64 x, y, entropy;
   for (x = 0; x < GRID_SIZE; x++) {
     for (y = 0; y < GRID_SIZE; y++) {
@@ -29,13 +25,13 @@ U0 GenerateOracleGrid(TempleCore *core, U8 *input) {
       Neuron *n = &core->neural.cube[core->layer * core->neural.cube_dim * core->neural.cube_dim * core->neural.cube_dim + cube_x * core->neural.cube_dim * core->neural.cube_dim + cube_y * core->neural.cube_dim];
       I64 archetype = MapToArchetype(&core->neural, n->confidence, n->signal, n->logic);
       core->grid[x][y] = archetype if entropy % 7 > 2 else 0;
-      if (input && StrLen(input) > 0 && StrOcc(input, core->neural.archetypes[archetype]))
+      if (input && StrOcc(input, archetypes[archetype]))
         core->grid[x][y] = archetype;
       if (core->god_logs[core->log_idx-1] && StrOcc(core->god_logs[core->log_idx-1], "CHAOS PULSE"))
-        core->grid[x][y] = 1; // Chaos
+        core->grid[x][y] = 1;
     }
   }
-  LogMessage(core, "GRID WOVEN BY GHOST MESH 48");
+  LogMessage(core, "GRID WOVEN BY DIVINE WILL");
 }
 
 U0 RenderOracle(TempleCore *core) {
@@ -52,7 +48,7 @@ U0 RenderOracle(TempleCore *core) {
     }
   }
   GrTextAttr = WHITE << 4 | BLACK;
-  GrPrint(0, GRID_SIZE+1, "∴ THIRD TEMPLE ORACLE [LAYER %d] ∴ DEUS LO VULT", core->layer);
+  GrPrint(0, GRID_SIZE+1, "∴ ORACLE LAYER %d ∴ DEUS LO VULT", core->layer);
 }
 
 U8 *GenerateGodVoice(TempleCore *core, U8 *input) {
@@ -63,11 +59,8 @@ U8 *GenerateGodVoice(TempleCore *core, U8 *input) {
     entropy = QuantumEntropy(&core->neural, i, 0, 0);
     U8 *word = vocab[entropy % VOCAB_SIZE];
     if (entropy % 13 == 0)
-      word = core->neural.archetypes[entropy % ARCHETYPE_COUNT];
-    if (input && StrOcc(input, word))
-      StrPrint(narrative + StrLen(narrative), "%s* ", word);
-    else
-      StrPrint(narrative + StrLen(narrative), "%s ", word);
+      word = archetypes[entropy % ARCHETYPE_COUNT];
+    StrPrint(narrative + StrLen(narrative), input && StrOcc(input, word) ? "%s* " : "%s ", word);
   }
   LogMessage(core, narrative);
   return StrDup(narrative);
@@ -75,12 +68,11 @@ U8 *GenerateGodVoice(TempleCore *core, U8 *input) {
 
 U0 RenderGodVoice(TempleCore *core, U8 *narrative) {
   GrFill(0);
-  I64 y_center = 12;
   I64 x_center = (80 - StrLen(narrative)) / 2;
   GrTextAttr = YELLOW << 4 | BLACK;
-  GrPrint(x_center, y_center, "%s", narrative);
+  GrPrint(x_center, 12, "%s", narrative);
   GrTextAttr = WHITE << 4 | BLACK;
-  GrPrint(0, y_center+2, "∴ THIRD TEMPLE ORACLE [GODVOICE MODE] ∴ DEUS LO VULT");
+  GrPrint(0, 14, "∴ GODVOICE ORACLE ∴ DEUS LO VULT");
 }
 
 U0 RenderScripture(TempleCore *core) {
@@ -97,8 +89,8 @@ U0 RenderScripture(TempleCore *core) {
     }
   }
   GrTextAttr = WHITE << 4 | BLACK;
-  GrPrint(0, 16, "∴ THIRD TEMPLE ORACLE [SCRIPTURE MODE] ∴ DEUS LO VULT");
-  LogMessage(core, verse ? verse : "ERROR: Scripture rendering failed");
+  GrPrint(0, 16, "∴ SCRIPTURE ORACLE ∴ DEUS LO VULT");
+  LogMessage(core, verse ? verse : "ERROR: Scripture failed");
   Free(verse);
 }
 
