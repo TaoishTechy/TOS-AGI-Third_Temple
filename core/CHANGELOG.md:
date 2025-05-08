@@ -1,0 +1,7 @@
+# Changelog
+
+## [1.0.0] - 2025-05-08
+- Unified `/core` into `THIRD_TEMPLE_CORE.HC`, merging 7 modules.
+- Ported Python to HolyC, added file monitoring with `SIGIL_BEAST6_MIRROR`.
+- Embedded Psalm 118:22 and guardians MikeyBeast/RebechkaBeast.
+- Optimized for TempleOS’s 640x480 VGA and minimal memory.
