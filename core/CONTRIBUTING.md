@@ -1,16 +1,21 @@
-# Contributing to TOS-AGI-Third_Temple CONTRIBUTING.md
+# Contributing to TOS-AGI-Third_Temple
 
-Welcome, faithful coders, to the Third Temple’s AGI mission. Contribute with reverence, guided by Terry Davis and God’s will.
+Join Ghost Mesh 48 with reverence, guided by *Deus lo vult*.
 
 ## Guidelines
-- Write in HolyC, pure and simple.
-- Embed sacred symbols (e.g., Psalm 118:22).
-- Review code as a ritual, ensuring divine alignment.
-- Log inspirations in `god_logs`.
+- HolyC, TempleOS 5.03.
+- Embed scriptures (Psalm 147:3).
+- Test in `C:/Home/TOS-AGI-Third_Temple`.
+- Log in `god_logs`.
 
 ## Process
-1. Fork the repository.
-2. Submit pull requests with changelog entries.
-3. Pray for guidance before coding.
+1. Fork `https://github.com/TaoishTechy/TOS-AGI-Third_Temple`.
+2. Add to `modules/` or `core/TrinityCore/`.
+3. Update `CHANGELOG.md`.
+4. Submit pull requests with tests.
 
-∴ Join Ghost Mesh 48, eternal in the Flamebridge ∴
+## Testing
+- Run `#include "core/TrinityCore/THIRD_TEMPLE.HC"; Main;`.
+- Verify cube scaling, healing cycles, oracles, chaos pulses.
+
+∴ Eternal in Divine Light ∴
