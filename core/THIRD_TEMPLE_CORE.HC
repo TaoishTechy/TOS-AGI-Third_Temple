@@ -28,6 +28,7 @@
 #define GRID_SIZE 12
 #define LOG_SIZE 16
 #define MAX_CUBE_DIM 5
+#define INPUT_SIZE 128
 
 class TempleCore {
   NeuralCube neural;            // Dynamic neural cube
@@ -65,12 +66,10 @@ U0 InitCore(TempleCore *core, I64 mode, I64 cube_dim) {
   LogMessage(core, "CUBE INITIALIZED: %dx%dx%dx%d", cube_dim, cube_dim, cube_dim, LAYER_COUNT);
 }
 
-U0 TempleCoreRun(U8 *input, I64 mode, I64 cube_dim) {
-  TempleCore core;
-  InitCore(&core, mode, cube_dim);
-  if (core.log_idx > 0 && StrOcc(core.god_logs[0], "ERROR")) {
+U0 TempleCoreRun(TempleCore *core, U8 *input) {
+  if (!core || core->log_idx > 0 && StrOcc(core->god_logs[0], "ERROR")) {
     GrFill(0);
-    GrPrint(0, 0, "⚡ TEMPLE FAILED TO IGNITE ⚡ %s", core.god_logs[0]);
+    GrPrint(0, 0, "⚡ TEMPLE FAILED TO IGNITE ⚡ %s", core->god_logs[0]);
     Sleep(1000);
     return;
   }
@@ -78,67 +77,77 @@ U0 TempleCoreRun(U8 *input, I64 mode, I64 cube_dim) {
   I64 key;
 
   while (!KeyDown(CHAR_ESC)) {
-    if (!MonitorGuardian(&core)) {
-      LogMessage(&core, "ERROR: Guardian monitoring failed");
+    if (!MonitorGuardian(core)) {
+      LogMessage(core, "ERROR: Guardian monitoring failed");
       Snd(220);
     }
-    if (!ProcessNeuralCube(&core.neural, input)) {
-      LogMessage(&core, "ERROR: Neural cube processing failed");
+    if (!ProcessNeuralCube(&core->neural, input)) {
+      LogMessage(core, "ERROR: Neural cube processing failed");
       Snd(220);
     }
-    ProcessTokamak(&core.neural);
+    ProcessTokamak(&core->neural);
     key = GetKey;
-    if (key == '3') core.cube_dim = 3;
-    if (key == '4') core.cube_dim = 4;
-    if (key == '5') core.cube_dim = 5;
+    if (key == '3') core->cube_dim = 3;
+    if (key == '4') core->cube_dim = 4;
+    if (key == '5') core->cube_dim = 5;
     if (key >= '3' && key <= '5') {
-      InitNeuralCube(&core.neural, core.cube_dim);
-      LogMessage(&core, "CUBE RESCALED: %dx%dx%dx%d", core.cube_dim, core.cube_dim, core.cube_dim, LAYER_COUNT);
+      InitNeuralCube(&core->neural, core->cube_dim);
+      LogMessage(core, "CUBE RESCALED: %dx%dx%dx%d", core->cube_dim, core->cube_dim, core->cube_dim, LAYER_COUNT);
     }
-    if (mode == MODE_ORACLE) {
-      GenerateOracleGrid(&core, input);
-      RenderOracle(&core);
-    } else if (mode == MODE_GODVOICE) {
-      narrative = GenerateGodVoice(&core, input);
-      if (narrative && ApplyEthics(&core, narrative))
-        RenderGodVoice(&core, narrative);
+    if (key == 'o') core->mode = MODE_ORACLE;
+    if (key == 'g') core->mode = MODE_GODVOICE;
+    if (key == 'm') core->mode = MODE_MEME;
+    if (key == 's') core->mode = MODE_SCRIPTURE;
+    if (core->mode == MODE_ORACLE) {
+      GenerateOracleGrid(core, input);
+      RenderOracle(core);
+    } else if (core->mode == MODE_GODVOICE) {
+      narrative = GenerateGodVoice(core, input);
+      if (narrative && ApplyEthics(core, narrative))
+        RenderGodVoice(core, narrative);
       else
-        RenderGodVoice(&core, "VOID SEALED BY DIVINE WILL");
+        RenderGodVoice(core, "VOID SEALED BY DIVINE WILL");
       Free(narrative);
-    } else if (mode == MODE_MEME) {
-      RenderMeme(&core);
-    } else if (mode == MODE_SCRIPTURE) {
-      RenderScripture(&core);
+    } else if (core->mode == MODE_MEME) {
+      RenderMeme(core);
+    } else if (core->mode == MODE_SCRIPTURE) {
+      RenderScripture(core);
     }
-    if (QuantumEntropy(&core.neural, 0, 0, 0) % 100 < 20) {
-      narrative = ScriptureOracle(&core);
+    if (QuantumEntropy(&core->neural, 0, 0, 0) % 100 < 20) {
+      narrative = ScriptureOracle(core);
       if (narrative) {
-        LogMessage(&core, narrative);
+        LogMessage(core, narrative);
         Snd(880); // Scripture tone
         Free(narrative);
       }
     }
-    if (core.god_logs[core.log_idx-1] && StrOcc(core.god_logs[core.log_idx-1], "CHAOS PULSE"))
+    if (core->god_logs[core->log_idx-1] && StrOcc(core->god_logs[core->log_idx-1], "CHAOS PULSE"))
       Snd(440); // Chaos tone
-    core.layer = (core.layer + 1) % LAYER_COUNT;
-    GrPrint(0, GRID_SIZE+2, "CUBE: %dx%d | MODE: %d | PRESS 3-5 TO RESCALE, ESC TO EXIT", core.cube_dim, LAYER_COUNT, core.mode);
+    core->layer = (core->layer + 1) % LAYER_COUNT;
+    GrPrint(0, GRID_SIZE+2, "CUBE: %dx%d | MODE: %s | INPUT: %s", core->cube_dim, LAYER_COUNT,
+            core->mode == MODE_ORACLE ? "ORACLE" :
+            core->mode == MODE_GODVOICE ? "GODVOICE" :
+            core->mode == MODE_MEME ? "MEME" : "SCRIPTURE", input);
+    GrPrint(0, GRID_SIZE+3, "PRESS 3-5 TO RESCALE, o/g/m/s TO SWITCH MODE, ESC TO EXIT");
     Sleep(33); // 30Hz
   }
 
-  LogMessage(&core, "TEMPLE SEALED BY DIVINE WILL");
+  LogMessage(core, "TEMPLE SEALED BY DIVIVE WILL");
   GrFill(0);
   GrPrint(0, 0, "⚡ THIRD TEMPLE ETERNAL IN MEMORY ⚡ DEUS LO VULT");
-  GrPrint(0, 1, "神 LOGS: %s", core.god_logs[core.log_idx]);
+  GrPrint(0, 1, "神 LOGS: %s", core->god_logs[core->log_idx]);
 
   I64 i;
-  for (i = 0; i <= core.log_idx; i++)
-    Free(core.god_logs[i]);
-  for (i = 0; i < core.neural.file_count; i++)
-    Free(core.neural.file_names[i]);
+  for (i = 0; i <= core->log_idx; i++)
+    Free(core->god_logs[i]);
+  for (i = 0; i < core->neural.file_count; i++)
+    Free(core->neural.file_names[i]);
 }
 
 // ===== SACRED RITUAL =====
 U0 Main() {
+  TempleCore core;
+  U8 input[INPUT_SIZE];
   Print("\n"
     "███████╗ ██████╗ ██╗   ██╗██╗███╗   ██╗\n"
     "██╔════╝██╔═══██╗██║   ██║██║████╗  ██║\n"
@@ -147,5 +156,8 @@ U0 Main() {
     "██║     ╚██████╔╝ ╚████╔╝ ██║██║ ╚████║\n"
     "╚═╝      ╚═════╝   ╚═══╝  ╚═╝╚═╝  ╚═══╝\n"
     "∴ FLAMEBEARER’S TEMPLE AWAKENS ∴ DEUS LO VULT\n");
-  TempleCoreRun("BREAK THE MATRIX", MODE_ORACLE, 4);
+  GrPrint(0, 5, "ENTER DIVINE COMMAND (e.g., BREAK THE MATRIX):");
+  InStr(input, INPUT_SIZE);
+  InitCore(&core, MODE_ORACLE, 4);
+  TempleCoreRun(&core, StrLen(input) > 0 ? input : "BREAK THE MATRIX");
 }
