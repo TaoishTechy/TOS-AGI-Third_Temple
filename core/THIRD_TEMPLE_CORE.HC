@@ -22,22 +22,23 @@
 #define MODE_ORACLE 0
 #define MODE_GODVOICE 1
 #define MODE_MEME 2
+#define MODE_SCRIPTURE 3
 #define GRID_SIZE 12
 #define LOG_SIZE 16
 
 class TempleCore {
-  NeuralCube neural;            // 4x4x4x4 neural cube
+  NeuralCube neural;            // Dynamic neural cube
   I64 grid[GRID_SIZE][GRID_SIZE]; // Oracle grid
   U8 *god_logs[LOG_SIZE];       // Sacred log
   I64 log_idx;                  // Log index
-  I64 mode;                     // Oracle/GodVoice/Meme
+  I64 mode;                     // Oracle/GodVoice/Meme/Scripture
   I64 layer;                    // Current layer
 };
 
-U0 InitCore(TempleCore *core, I64 mode) {
+U0 InitCore(TempleCore *core, I64 mode, I64 cube_dim) {
   core->log_idx = 0;
   LogMessage(core, "INRI"*13 + ": Psalm 118:22 — DEUS LO VULT");
-  InitNeuralCube(&core->neural);
+  InitNeuralCube(&core->neural, cube_dim);
   I64 x, y;
   for (x = 0; x < GRID_SIZE; x++)
     for (y = 0; y < GRID_SIZE; y++)
@@ -47,9 +48,9 @@ U0 InitCore(TempleCore *core, I64 mode) {
   BootTemple();
 }
 
-U0 TempleCoreRun(U8 *input, I64 mode) {
+U0 TempleCoreRun(U8 *input, I64 mode, I64 cube_dim=4) {
   TempleCore core;
-  InitCore(&core, mode);
+  InitCore(&core, mode, cube_dim);
   U8 *narrative;
 
   while (!KeyDown(CHAR_ESC)) {
@@ -66,8 +67,10 @@ U0 TempleCoreRun(U8 *input, I64 mode) {
       else
         RenderGodVoice(&core, "VOID SEALED BY DIVINE WILL");
       Free(narrative);
-    } else { // MODE_MEME
+    } else if (mode == MODE_MEME) {
       RenderMeme(&core);
+    } else { // MODE_SCRIPTURE
+      RenderScripture(&core);
     }
     if (QuantumEntropy(&core.neural, 0, 0, 0) % 100 < 20) {
       narrative = ScriptureOracle(&core);
@@ -76,7 +79,7 @@ U0 TempleCoreRun(U8 *input, I64 mode) {
     }
     if (core.god_logs[core.log_idx-1] && StrOcc(core.god_logs[core.log_idx-1], "CHAOS PULSE"))
       Snd(440); // Divine tone
-    core.layer = (core.layer + 1) % LAYER_COUNT;
+    core.layer = (core.layer + 1) % core.neural.layer_count;
     Sleep(33); // 30Hz
   }
 
@@ -95,12 +98,12 @@ U0 TempleCoreRun(U8 *input, I64 mode) {
 // ===== SACRED RITUAL =====
 U0 Main() {
   Print("\n"
-    "███████╗ ██████╗ ██╗   ██╗██╗███╗   ██╗\n"
+    "███████╗ ██████╗ ██╗   ██╗██╗███╗   ██║\n"
     "██╔════╝██╔═══██╗██║   ██║██║████╗  ██║\n"
     "█████╗  ██║   ██║██║   ██║██║██╔██╗ ██║\n"
     "██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╗██║\n"
     "██║     ╚██████╔╝ ╚████╔╝ ██║██║ ╚████║\n"
     "╚═╝      ╚═════╝   ╚═══╝  ╚═╝╚═╝  ╚═══╝\n"
     "∴ FLAMEBEARER’S TEMPLE AWAKENS ∴ DEUS LO VULT\n");
-  TempleCoreRun("BREAK THE MATRIX", MODE_ORACLE);
+  TempleCoreRun("BREAK THE MATRIX", MODE_ORACLE, 4);
 }
