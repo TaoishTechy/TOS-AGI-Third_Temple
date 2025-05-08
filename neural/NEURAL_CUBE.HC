@@ -1,9 +1,13 @@
 // ========================================================
 // MODULE: NEURAL_CUBE.HC
-// PURPOSE: Unified 4x4x4x4 Trinary Neural Cube
+// PURPOSE: 4x4x4x4 Trinary Neural Cube for Symbolic Reasoning
 // AUTHORS: MikeyBeast + RebechkaBeast + Terry's Ghost
 // VERSE: "You shall know the truth, and the truth shall set you free" (John 8:32)
 // ========================================================
+
+#include "/sigils/SIGIL_CORE.HC"
+#include "/util/ENTROPY.HC"
+#include "/util/LOGGING.HC"
 
 #define CUBE_DIM 4
 #define LAYER_COUNT 4
@@ -22,8 +26,6 @@ class Neuron {
 class NeuralCube {
   Neuron cube[LAYER_COUNT][CUBE_DIM][CUBE_DIM][CUBE_DIM];
   U8 *archetypes[ARCHETYPE_COUNT];
-  U8 *glyphs[ARCHETYPE_COUNT];
-  I64 colors[ARCHETYPE_COUNT];
   I64 fuzzy_rules[ARCHETYPE_COUNT][3];
   I64 seed;
   I64 file_checksums[LOG_SIZE];
@@ -43,8 +45,6 @@ U0 InitNeuralCube(NeuralCube *cube) {
         }
   cube->archetypes[0] = "TRUTH"; cube->archetypes[1] = "CHAOS";
   cube->archetypes[2] = "HARMONY"; cube->archetypes[3] = "VOID";
-  cube->glyphs[0] = "⚡"; cube->glyphs[1] = "✟"; cube->glyphs[2] = "⌁"; cube->glyphs[3] = "∴";
-  cube->colors[0] = BLUE; cube->colors[1] = RED; cube->colors[2] = GREEN; cube->colors[3] = BLACK;
   cube->fuzzy_rules[0][0] = 80; cube->fuzzy_rules[0][1] = 1; cube->fuzzy_rules[0][2] = 90;
   cube->fuzzy_rules[1][0] = 50; cube->fuzzy_rules[1][1] = -1; cube->fuzzy_rules[1][2] = 60;
   cube->fuzzy_rules[2][0] = 80; cube->fuzzy_rules[2][1] = 0; cube->fuzzy_rules[2][2] = 80;
@@ -56,13 +56,6 @@ U0 InitNeuralCube(NeuralCube *cube) {
   }
   cube->seed = Ticks % SACRED_SEED;
   Seed(cube->seed);
-}
-
-I64 QuantumEntropy(NeuralCube *cube, I64 x, I64 y, I64 z) {
-  I64 entropy = (x * y * z * SACRED_SEED + Ticks + RandU16) % (SACRED_SEED * 1000);
-  if (cube->file_count > 0 && StrOcc(cube->file_names[cube->file_count-1], "CHAOS"))
-    entropy = (entropy * 13) % (SACRED_SEED * 1000);
-  return entropy;
 }
 
 I64 MapToArchetype(NeuralCube *cube, I64 confidence, I64 signal, I64 logic) {
