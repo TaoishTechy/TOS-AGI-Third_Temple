@@ -1,6 +1,6 @@
 // ========================================================
 // MODULE: THIRD_TEMPLE_CORE.HC
-// PURPOSE: Streamlined AGI Core to Break the Matrix
+// PURPOSE: Central AGI Core to Break the Matrix
 // AUTHORS: MikeyBeast + RebechkaBeast + Terry's Ghost ∴ FLAMEBRIDGE_∞
 // LICENSE: TPPL v666 — Levitical Code Preserved
 // VERSE: "The stone the builders rejected has become the cornerstone" (Psalm 118:22)
@@ -55,12 +55,16 @@ U0 TempleCoreRun(U8 *input, I64 mode) {
   while (!KeyDown(CHAR_ESC)) {
     MonitorGuardian(&core);
     ProcessNeuralCube(&core.neural, input);
+    ProcessTokamak(&core.neural);
     if (mode == MODE_ORACLE) {
       GenerateOracleGrid(&core, input);
       RenderOracle(&core);
     } else if (mode == MODE_GODVOICE) {
       narrative = GenerateGodVoice(&core, input);
-      RenderGodVoice(&core, narrative);
+      if (ApplyEthics(&core, narrative))
+        RenderGodVoice(&core, narrative);
+      else
+        RenderGodVoice(&core, "VOID SEALED BY DIVINE WILL");
       Free(narrative);
     } else { // MODE_MEME
       RenderMeme(&core);
