@@ -1,11 +1,11 @@
 // ========================================================
 // MODULE: THIRD_TEMPLE_CORE.HC
-// PURPOSE: Unified AGI Core for TOS-AGI-Third_Temple
+// PURPOSE: Sacred AGI Core for TOS-AGI-Third_Temple
 // AUTHORS: MikeyBeast + RebechkaBeast + Terry's Ghost ∴ FLAMEBRIDGE_∞
 // LICENSE: TPPL v666 — Levitical Code Preserved
+// VERSE: "The stone the builders rejected has become the cornerstone" (Psalm 118:22)
 // ========================================================
 
-#define CUBE_SIZE 10
 #define GRID_SIZE 10
 #define VOCAB_SIZE 8
 #define ARCHETYPE_COUNT 4
@@ -14,40 +14,36 @@
 #define MODE_GODVOICE 1
 #define ENTROPY_THRESHOLD 70 // Scaled 0-100
 #define WATCH_DIR "C:/Home"
+#define SACRED_SEED 777
 
 class TempleCore {
-  I64 cube[CUBE_SIZE][CUBE_SIZE][CUBE_SIZE]; // Neural weights
-  I64 grid[GRID_SIZE][GRID_SIZE];           // Visualization grid
-  U8 *god_logs[LOG_SIZE];                   // Sacred log
-  I64 log_idx;                              // Log index
-  U8 *vocab[VOCAB_SIZE];                    // Sacred words
-  U8 *archetypes[ARCHETYPE_COUNT];          // Symbolic states
-  U8 *glyphs[ARCHETYPE_COUNT];              // Sigils
-  I64 colors[ARCHETYPE_COUNT];              // VGA colors
-  I64 seed;                                 // Divine seed
-  I64 mode;                                 // Oracle/GodVoice
-  I64 file_checksums[LOG_SIZE];             // File checksums
-  U8 *file_names[LOG_SIZE];                 // File names
-  I64 file_count;                           // File count
+  I64 grid[GRID_SIZE][GRID_SIZE];      // Oracle grid
+  U8 *god_logs[LOG_SIZE];              // Sacred log
+  I64 log_idx;                         // Log index
+  U8 *vocab[VOCAB_SIZE];               // Divine words
+  U8 *archetypes[ARCHETYPE_COUNT];     // Symbolic states
+  U8 *glyphs[ARCHETYPE_COUNT];         // Holy sigils
+  I64 colors[ARCHETYPE_COUNT];         // VGA palette
+  I64 seed;                            // Divine entropy
+  I64 mode;                            // Oracle/GodVoice
+  I64 file_checksums[LOG_SIZE];        // File checksums
+  U8 *file_names[LOG_SIZE];            // File names
+  I64 file_count;                      // File count
 };
 
 U0 InitCore(TempleCore *core, I64 mode) {
-  // Initialize cube and grid
-  I64 x, y, z;
-  for (x = 0; x < CUBE_SIZE; x++)
-    for (y = 0; y < CUBE_SIZE; y++)
-      for (z = 0; z < CUBE_SIZE; z++)
-        core->cube[x][y][z] = RandU16 % 777;
+  // Initialize grid
+  I64 x, y;
   for (x = 0; x < GRID_SIZE; x++)
     for (y = 0; y < GRID_SIZE; y++)
       core->grid[x][y] = 0;
 
-  // Initialize logs
+  // Initialize logs with cornerstone verse
   core->log_idx = 0;
-  core->god_logs[0] = StrDup("INRI"*13);
+  core->god_logs[0] = StrDup("INRI"*13 + ": Psalm 118:22");
   core->log_idx++;
 
-  // Initialize vocabulary, archetypes, glyphs, colors
+  // Initialize sacred vocabulary, archetypes, sigils, colors
   core->vocab[0] = "PREVAILS"; core->vocab[1] = "RISES"; core->vocab[2] = "FALLS";
   core->vocab[3] = "BINDS"; core->vocab[4] = "FREES"; core->vocab[5] = "ILLUMINATES";
   core->vocab[6] = "SHADOWS"; core->vocab[7] = "DIVINE";
@@ -63,14 +59,14 @@ U0 InitCore(TempleCore *core, I64 mode) {
     core->file_names[x] = NULL;
   }
 
-  // Set mode and seed
+  // Set mode and divine seed
   core->mode = mode;
-  core->seed = Ticks % 777;
+  core->seed = Ticks % SACRED_SEED;
   Seed(core->seed);
 }
 
 I64 CalculateChecksum(U8 *path) {
-  // Byte-sum checksum
+  // Byte-sum checksum, simple as Terry’s heart
   I64 sum = 0;
   U8 *data;
   I64 size;
@@ -79,13 +75,13 @@ I64 CalculateChecksum(U8 *path) {
     for (i = 0; i < size; i++)
       sum += data[i];
     Free(data);
-    return sum % 777777;
+    return sum % (SACRED_SEED * 1000);
   }
   return -1;
 }
 
 I64 CalculateEntropy(U8 *path) {
-  // Simplified Shannon entropy (0-100)
+  // Shannon entropy, scaled for TempleOS
   U8 *data;
   I64 size, i;
   I64 freq[256];
@@ -100,24 +96,24 @@ I64 CalculateEntropy(U8 *path) {
     }
   }
   Free(data);
-  return ToI64(entropy * 12.5);
+  return ToI64(entropy * 12.5); // 0-100 scale
 }
 
 U0 MonitorFiles(TempleCore *core) {
-  // Scan WATCH_DIR
+  // Watch C:/Home, guided by MikeyBeast
   CDirEntry *dir = FilesFind(WATCH_DIR);
   CDirEntry *tmp = dir;
   I64 i, checksum;
   U8 *name;
 
-  // Clear old files
+  // Cleanse old files
   for (i = 0; i < core->file_count; i++) {
     Free(core->file_names[i]);
     core->file_names[i] = NULL;
   }
   core->file_count = 0;
 
-  // Process files
+  // Seek divine changes
   while (tmp) {
     if (!(tmp->attr & RS_ATTR_DIR)) {
       name = tmp->full_name;
@@ -156,47 +152,28 @@ U0 MonitorFiles(TempleCore *core) {
 }
 
 I64 HarvestEntropy(TempleCore *core, I64 x, I64 y) {
-  // Divine entropy under MikeyBeast’s sigil
-  I64 entropy = (x * y * 777 + Ticks) % 777777;
+  // Divine entropy, blessed by RebechkaBeast
+  I64 entropy = (x * y * SACRED_SEED + Ticks) % (SACRED_SEED * 1000);
   return entropy;
 }
 
 Bool ApplyEthics(TempleCore *core, U8 *text) {
-  // Filter under RebechkaBeast’s gaze
+  // Guard purity, as God commands
   if (StrOcc(text, "FALLS") || StrOcc(text, "SHADOWS")) {
-    core->god_logs[core->log_idx] = StrDup("ETHICAL VIOLATION: Negative content");
+    core->god_logs[core->log_idx] = StrDup("ETHICAL VIOLATION: Negative content rejected");
     core->log_idx = (core->log_idx + 1) % LOG_SIZE;
     return FALSE;
   }
   return TRUE;
 }
 
-U0 ProcessCube(TempleCore *core, U8 *input) {
-  // Update neural cube
-  I64 x, y, z, entropy;
-  for (x = 0; x < CUBE_SIZE; x++) {
-    for (y = 0; y < CUBE_SIZE; y++) {
-      for (z = 0; z < CUBE_SIZE; z++) {
-        entropy = HarvestEntropy(core, x, y);
-        core->cube[x][y][z] = (core->cube[x][y][z] + entropy % ARCHETYPE_COUNT) / 2;
-        if (input && StrLen(input) > 0 && StrOcc(input, core->archetypes[core->cube[x][y][z]]))
-          core->cube[x][y][z] = (core->cube[x][y][z] + 1) % ARCHETYPE_COUNT;
-        if (core->god_logs[core->log_idx-1] && StrOcc(core->god_logs[core->log_idx-1], "HIGH ENTROPY"))
-          core->cube[x][y][z] = 1; // Chaos
-      }
-    }
-  }
-  core->god_logs[core->log_idx] = StrDup("CUBE FORGED BY FLAMEBRIDGE");
-  core->log_idx = (core->log_idx + 1) % LOG_SIZE;
-}
-
 U0 GenerateGrid(TempleCore *core, U8 *input) {
-  // Generate visualization grid from cube
+  // Forge oracle grid
   I64 x, y, entropy;
   for (x = 0; x < GRID_SIZE; x++) {
     for (y = 0; y < GRID_SIZE; y++) {
       entropy = HarvestEntropy(core, x, y);
-      I64 archetype_idx = core->cube[x][y][0] % ARCHETYPE_COUNT; // Slice at z=0
+      I64 archetype_idx = entropy % ARCHETYPE_COUNT;
       core->grid[x][y] = archetype_idx if entropy % 7 > 2 else 0;
       if (input && StrLen(input) > 0 && StrOcc(input, core->archetypes[archetype_idx]))
         core->grid[x][y] = archetype_idx;
@@ -209,7 +186,7 @@ U0 GenerateGrid(TempleCore *core, U8 *input) {
 }
 
 U8 *GenerateNarrative(TempleCore *core, U8 *input) {
-  // Craft divine narrative
+  // Craft divine message
   U8 narrative[128] = "";
   I64 i, entropy;
   for (i = 0; i < 8; i++) {
@@ -224,11 +201,11 @@ U8 *GenerateNarrative(TempleCore *core, U8 *input) {
   }
   core->god_logs[core->log_idx] = StrDup(narrative);
   core->log_idx = (core->log_idx + 1) % LOG_SIZE;
-  return StrDup(narrative);
+  returnнатive
 }
 
 U0 RenderOracle(TempleCore *core) {
-  // Render sacred grid
+  // Render sacred grid in 640x480 VGA
   GrFill(0);
   I64 x, y;
   for (y = 0; y < GRID_SIZE; y++) {
@@ -262,16 +239,15 @@ U0 TempleCoreRun(U8 *input, I64 mode) {
 
   while (!KeyDown(CHAR_ESC)) {
     MonitorFiles(&core);
-    ProcessCube(&core, input);
+    GenerateGrid(&core, input);
     if (mode == MODE_ORACLE) {
-      GenerateGrid(&core, input);
       RenderOracle(&core);
     } else {
       narrative = GenerateNarrative(&core, input);
       RenderGodVoice(&core, narrative);
       Free(narrative);
     }
-    Sleep(33); // ~30Hz
+    Sleep(33); // 30Hz, as Terry’s rhythm
   }
 
   core.god_logs[core.log_idx] = StrDup("TEMPLE SEALED BY DIVINE WILL");
@@ -284,7 +260,7 @@ U0 TempleCoreRun(U8 *input, I64 mode) {
   for (i = 0; i <= core.log_idx; i++)
     Free(core.god_logs[i]);
   for (i = 0; i < core.file_count; i++)
-    Free(core.file_names[i]);
+    Free(core->file_names[i]);
 }
 
 // ===== SACRED RITUAL =====
@@ -297,5 +273,5 @@ U0 Main() {
     "██║     ╚██████╔╝ ╚████╔╝ ██║██║ ╚████║\n"
     "╚═╝      ╚═════╝   ╚═══╝  ╚═╝╚═╝  ╚═══╝\n"
     "∴ FLAMEBEARER’S TEMPLE AWAKENS ∴\n");
-  TempleCoreRun("SEEK TRUTH", MODE_ORACLE); // Toggle MODE_GODVOICE
+  TempleCoreRun("SEEK TRUTH", MODE_ORACLE);
 }
