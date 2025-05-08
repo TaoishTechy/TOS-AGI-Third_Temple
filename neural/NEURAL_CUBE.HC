@@ -1,6 +1,6 @@
 // ========================================================
 // MODULE: NEURAL_CUBE.HC
-// PURPOSE: 4x4x4x4 Trinary Neural Cube for Symbolic Reasoning
+// PURPOSE: Dynamic Trinary Neural Cube for Symbolic Reasoning
 // AUTHORS: MikeyBeast + RebechkaBeast + Terry's Ghost
 // VERSE: "You shall know the truth, and the truth shall set you free" (John 8:32)
 // ========================================================
@@ -9,8 +9,7 @@
 #include "/util/ENTROPY.HC"
 #include "/util/LOGGING.HC"
 
-#define CUBE_DIM 4
-#define LAYER_COUNT 4
+#define MAX_CUBE_DIM 5
 #define ARCHETYPE_COUNT 4
 #define LOG_SIZE 16
 #define ENTROPY_THRESHOLD 70
@@ -24,7 +23,9 @@ class Neuron {
 };
 
 class NeuralCube {
-  Neuron cube[LAYER_COUNT][CUBE_DIM][CUBE_DIM][CUBE_DIM];
+  Neuron *cube;    // Dynamic 3D array
+  I64 dim;        // Cube dimension
+  I64 layer_count;// Number of layers
   U8 *archetypes[ARCHETYPE_COUNT];
   I64 fuzzy_rules[ARCHETYPE_COUNT][3];
   I64 seed;
@@ -33,15 +34,19 @@ class NeuralCube {
   I64 file_count;
 };
 
-U0 InitNeuralCube(NeuralCube *cube) {
+U0 InitNeuralCube(NeuralCube *cube, I64 dim) {
+  if (dim < 4 || dim > MAX_CUBE_DIM) dim = 4; // Clamp to 4 or 5
+  cube->dim = dim;
+  cube->layer_count = dim;
+  cube->cube = MAlloc(dim * dim * dim * dim * sizeof(Neuron));
   I64 l, x, y, z;
-  for (l = 0; l < LAYER_COUNT; l++)
-    for (x = 0; x < CUBE_DIM; x++)
-      for (y = 0; y < CUBE_DIM; y++)
-        for (z = 0; z < CUBE_DIM; z++) {
-          cube->cube[l][x][y][z].signal = (RandU16 % 3) - 1;
-          cube->cube[l][x][y][z].confidence = RandU16 % 100;
-          cube->cube[l][x][y][z].logic = RandU16 % 100;
+  for (l = 0; l < dim; l++)
+    for (x = 0; x < dim; x++)
+      for (y = 0; y < dim; y++)
+        for (z = 0; z < dim; z++) {
+          cube->cube[l * dim * dim * dim + x * dim * dim + y * dim + z].signal = (RandU16 % 3) - 1;
+          cube->cube[l * dim * dim * dim + x * dim * dim + y * dim + z].confidence = RandU16 % 100;
+          cube->cube[l * dim * dim * dim + x * dim * dim + y * dim + z].logic = RandU16 % 100;
         }
   cube->archetypes[0] = "TRUTH"; cube->archetypes[1] = "CHAOS";
   cube->archetypes[2] = "HARMONY"; cube->archetypes[3] = "VOID";
@@ -74,13 +79,13 @@ I64 MapToArchetype(NeuralCube *cube, I64 confidence, I64 signal, I64 logic) {
 }
 
 U0 ProcessNeuralCube(NeuralCube *cube, U8 *input) {
-  I64 l, x, y, z, entropy;
-  for (l = 0; l < LAYER_COUNT; l++) {
-    for (x = 0; x < CUBE_DIM; x++) {
-      for (y = 0; y < CUBE_DIM; y++) {
-        for (z = 0; z < CUBE_DIM; z++) {
+  I64 l, x, y, z, entropy, dim = cube->dim;
+  for (l = 0; l < dim; l++) {
+    for (x = 0; x < dim; x++) {
+      for (y = 0; y < dim; y++) {
+        for (z = 0; z < dim; z++) {
           entropy = QuantumEntropy(cube, x, y, z);
-          Neuron *n = &cube->cube[l][x][y][z];
+          Neuron *n = &cube->cube[l * dim * dim * dim + x * dim * dim + y * dim + z];
           I64 archetype = MapToArchetype(cube, n->confidence, n->signal, n->logic);
           n->confidence = (n->confidence + (entropy % 50)) / 2;
           n->logic = (n->logic + (archetype * 10)) / 2;
@@ -93,8 +98,8 @@ U0 ProcessNeuralCube(NeuralCube *cube, U8 *input) {
                 n->confidence += 15;
           }
           I64 neighbor_logic = 0;
-          if (x > 0) neighbor_logic += cube->cube[l][x-1][y][z].logic;
-          if (x < CUBE_DIM-1) neighbor_logic += cube->cube[l][x+1][y][z].logic;
+          if (x > 0) neighbor_logic += cube->cube[l * dim * dim * dim + (x-1) * dim * dim + y * dim + z].logic;
+          if (x < dim-1) neighbor_logic += cube->cube[l * dim * dim * dim + (x+1) * dim * dim + y * dim + z].logic;
           n->logic = (n->logic + neighbor_logic / 4) / 2;
           if (n->confidence > 100) n->confidence = 100;
           if (n->confidence < 0) n->confidence = 0;
@@ -104,4 +109,11 @@ U0 ProcessNeuralCube(NeuralCube *cube, U8 *input) {
       }
     }
   }
+}
+
+U0 FreeNeuralCube(NeuralCube *cube) {
+  Free(cube->cube);
+  I64 i;
+  for (i = 0; i < cube->file_count; i++)
+    Free(cube->file_names[i]);
 }
