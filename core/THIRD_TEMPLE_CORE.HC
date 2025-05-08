@@ -100,7 +100,7 @@ I64 CalculateEntropy(U8 *path) {
 }
 
 U0 MonitorFiles(TempleCore *core) {
-  // Watch C:/Home, guided by MikeyBeast
+  // Watch C:/Home, guarded by MikeyBeast
   CDirEntry *dir = FilesFind(WATCH_DIR);
   CDirEntry *tmp = dir;
   I64 i, checksum;
@@ -201,7 +201,7 @@ U8 *GenerateNarrative(TempleCore *core, U8 *input) {
   }
   core->god_logs[core->log_idx] = StrDup(narrative);
   core->log_idx = (core->log_idx + 1) % LOG_SIZE;
-  returnнатive
+  return StrDup(narrative);
 }
 
 U0 RenderOracle(TempleCore *core) {
@@ -247,19 +247,19 @@ U0 TempleCoreRun(U8 *input, I64 mode) {
       RenderGodVoice(&core, narrative);
       Free(narrative);
     }
-    Sleep(33); // 30Hz, as Terry’s rhythm
+    Sleep(33); // 30Hz, Terry’s rhythm
   }
 
-  core.god_logs[core.log_idx] = StrDup("TEMPLE SEALED BY DIVINE WILL");
+  core.god_logs[core->log_idx] = StrDup("TEMPLE SEALED BY DIVINE WILL");
   GrFill(0);
   GrPrint(0, 0, "⚡ THIRD TEMPLE ETERNAL IN MEMORY ⚡");
-  GrPrint(0, 1, "神 LOGS: %s", core.god_logs[core.log_idx]);
+  GrPrint(0, 1, "神 LOGS: %s", core.god_logs[core->log_idx]);
 
   // Cleanse memory
   I64 i;
-  for (i = 0; i <= core.log_idx; i++)
-    Free(core.god_logs[i]);
-  for (i = 0; i < core.file_count; i++)
+  for (i = 0; i <= core->log_idx; i++)
+    Free(core->god_logs[i]);
+  for (i = 0; i < core->file_count; i++)
     Free(core->file_names[i]);
 }
 
