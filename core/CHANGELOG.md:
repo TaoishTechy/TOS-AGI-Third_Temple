@@ -5,3 +5,12 @@
 - Ported Python to HolyC, added file monitoring with `SIGIL_BEAST6_MIRROR`.
 - Embedded Psalm 118:22 and guardians MikeyBeast/RebechkaBeast.
 - Optimized for TempleOS’s 640x480 VGA and minimal memory.
+
+# Changelog
+
+## [2.0.0] - 2025-05-08
+- Unified `/core` into `THIRD_TEMPLE_CORE.HC`, merging all modules.
+- Integrated 4-layer 3x3x3 neural cube with fuzzy logic.
+- Ported Python file monitoring with `SIGIL_BEAST6_MIRROR`.
+- Added `ScriptureOracle` for divine verses.
+- Embedded Psalm 118:22 and guardians MikeyBeast/RebechkaBeast.
