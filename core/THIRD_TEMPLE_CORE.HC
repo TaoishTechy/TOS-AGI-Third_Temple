@@ -9,6 +9,8 @@
 
 #include "/oracle/ORACLE_RENDER.HC"
 #include "/oracle/GODVOICE.HC"
+#include "/oracle/SCRIPTURE_RENDER.HC"
+#include "/oracle/RENDER_MEME.HC"
 #include "/neural/NEURAL_CUBE.HC"
 #include "/neural/TOKAMAK_FUSION.HC"
 #include "/sigils/SIGIL_CORE.HC"
@@ -25,6 +27,7 @@
 #define MODE_SCRIPTURE 3
 #define GRID_SIZE 12
 #define LOG_SIZE 16
+#define MAX_CUBE_DIM 5
 
 class TempleCore {
   NeuralCube neural;            // Dynamic neural cube
@@ -33,53 +36,92 @@ class TempleCore {
   I64 log_idx;                  // Log index
   I64 mode;                     // Oracle/GodVoice/Meme/Scripture
   I64 layer;                    // Current layer
+  I64 cube_dim;                 // Dynamic cube dimension
 };
 
 U0 InitCore(TempleCore *core, I64 mode, I64 cube_dim) {
+  if (cube_dim < 3 || cube_dim > MAX_CUBE_DIM) {
+    core->god_logs[0] = StrDup("ERROR: Invalid cube dimension");
+    core->log_idx = 1;
+    Snd(220); // Error tone
+    return;
+  }
   core->log_idx = 0;
-  LogMessage(core, "INRI"*13 + ": Psalm 118:22 — DEUS LO VULT");
-  InitNeuralCube(&core->neural, cube_dim);
+  core->god_logs[0] = StrDup("INRI"*13 + ": Psalm 118:22 — DEUS LO VULT");
+  core->log_idx++;
+  if (!InitNeuralCube(&core->neural, cube_dim)) {
+    LogMessage(core, "ERROR: Neural cube initialization failed");
+    Snd(220);
+    return;
+  }
   I64 x, y;
   for (x = 0; x < GRID_SIZE; x++)
     for (y = 0; y < GRID_SIZE; y++)
       core->grid[x][y] = 0;
   core->mode = mode;
   core->layer = 0;
+  core->cube_dim = cube_dim;
   BootTemple();
+  LogMessage(core, "CUBE INITIALIZED: %dx%dx%dx%d", cube_dim, cube_dim, cube_dim, LAYER_COUNT);
 }
 
-U0 TempleCoreRun(U8 *input, I64 mode, I64 cube_dim=4) {
+U0 TempleCoreRun(U8 *input, I64 mode, I64 cube_dim) {
   TempleCore core;
   InitCore(&core, mode, cube_dim);
+  if (core.log_idx > 0 && StrOcc(core.god_logs[0], "ERROR")) {
+    GrFill(0);
+    GrPrint(0, 0, "⚡ TEMPLE FAILED TO IGNITE ⚡ %s", core.god_logs[0]);
+    Sleep(1000);
+    return;
+  }
   U8 *narrative;
+  I64 key;
 
   while (!KeyDown(CHAR_ESC)) {
-    MonitorGuardian(&core);
-    ProcessNeuralCube(&core.neural, input);
+    if (!MonitorGuardian(&core)) {
+      LogMessage(&core, "ERROR: Guardian monitoring failed");
+      Snd(220);
+    }
+    if (!ProcessNeuralCube(&core.neural, input)) {
+      LogMessage(&core, "ERROR: Neural cube processing failed");
+      Snd(220);
+    }
     ProcessTokamak(&core.neural);
+    key = GetKey;
+    if (key == '3') core.cube_dim = 3;
+    if (key == '4') core.cube_dim = 4;
+    if (key == '5') core.cube_dim = 5;
+    if (key >= '3' && key <= '5') {
+      InitNeuralCube(&core.neural, core.cube_dim);
+      LogMessage(&core, "CUBE RESCALED: %dx%dx%dx%d", core.cube_dim, core.cube_dim, core.cube_dim, LAYER_COUNT);
+    }
     if (mode == MODE_ORACLE) {
       GenerateOracleGrid(&core, input);
       RenderOracle(&core);
     } else if (mode == MODE_GODVOICE) {
       narrative = GenerateGodVoice(&core, input);
-      if (ApplyEthics(&core, narrative))
+      if (narrative && ApplyEthics(&core, narrative))
         RenderGodVoice(&core, narrative);
       else
         RenderGodVoice(&core, "VOID SEALED BY DIVINE WILL");
       Free(narrative);
     } else if (mode == MODE_MEME) {
       RenderMeme(&core);
-    } else { // MODE_SCRIPTURE
+    } else if (mode == MODE_SCRIPTURE) {
       RenderScripture(&core);
     }
     if (QuantumEntropy(&core.neural, 0, 0, 0) % 100 < 20) {
       narrative = ScriptureOracle(&core);
-      LogMessage(&core, narrative);
-      Free(narrative);
+      if (narrative) {
+        LogMessage(&core, narrative);
+        Snd(880); // Scripture tone
+        Free(narrative);
+      }
     }
     if (core.god_logs[core.log_idx-1] && StrOcc(core.god_logs[core.log_idx-1], "CHAOS PULSE"))
-      Snd(440); // Divine tone
-    core.layer = (core.layer + 1) % core.neural.layer_count;
+      Snd(440); // Chaos tone
+    core.layer = (core.layer + 1) % LAYER_COUNT;
+    GrPrint(0, GRID_SIZE+2, "CUBE: %dx%d | MODE: %d | PRESS 3-5 TO RESCALE, ESC TO EXIT", core.cube_dim, LAYER_COUNT, core.mode);
     Sleep(33); // 30Hz
   }
 
@@ -98,7 +140,7 @@ U0 TempleCoreRun(U8 *input, I64 mode, I64 cube_dim=4) {
 // ===== SACRED RITUAL =====
 U0 Main() {
   Print("\n"
-    "███████╗ ██████╗ ██╗   ██╗██╗███╗   ██║\n"
+    "███████╗ ██████╗ ██╗   ██╗██╗███╗   ██╗\n"
     "██╔════╝██╔═══██╗██║   ██║██║████╗  ██║\n"
     "█████╗  ██║   ██║██║   ██║██║██╔██╗ ██║\n"
     "██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╗██║\n"
