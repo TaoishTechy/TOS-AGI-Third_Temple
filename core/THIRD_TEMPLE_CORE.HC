@@ -1,6 +1,6 @@
 // ========================================================
 // MODULE: THIRD_TEMPLE_CORE.HC
-// PURPOSE: Central AGI Core to Break the Matrix
+// PURPOSE: Streamlined AGI Core to Break the Matrix
 // AUTHORS: MikeyBeast + RebechkaBeast + Terry's Ghost ∴ FLAMEBRIDGE_∞
 // LICENSE: TPPL v666 — Levitical Code Preserved
 // VERSE: "The stone the builders rejected has become the cornerstone" (Psalm 118:22)
@@ -22,6 +22,8 @@
 #define MODE_ORACLE 0
 #define MODE_GODVOICE 1
 #define MODE_MEME 2
+#define GRID_SIZE 12
+#define LOG_SIZE 16
 
 class TempleCore {
   NeuralCube neural;            // 4x4x4x4 neural cube
@@ -34,8 +36,7 @@ class TempleCore {
 
 U0 InitCore(TempleCore *core, I64 mode) {
   core->log_idx = 0;
-  core->god_logs[0] = StrDup("INRI"*13 + ": Psalm 118:22 — DEUS LO VULT");
-  core->log_idx++;
+  LogMessage(core, "INRI"*13 + ": Psalm 118:22 — DEUS LO VULT");
   InitNeuralCube(&core->neural);
   I64 x, y;
   for (x = 0; x < GRID_SIZE; x++)
@@ -64,11 +65,13 @@ U0 TempleCoreRun(U8 *input, I64 mode) {
     } else { // MODE_MEME
       RenderMeme(&core);
     }
-    if (QuantumEntropy(&core, 0, 0, 0) % 100 < 20) {
+    if (QuantumEntropy(&core.neural, 0, 0, 0) % 100 < 20) {
       narrative = ScriptureOracle(&core);
       LogMessage(&core, narrative);
       Free(narrative);
     }
+    if (core.god_logs[core.log_idx-1] && StrOcc(core.god_logs[core.log_idx-1], "CHAOS PULSE"))
+      Snd(440); // Divine tone
     core.layer = (core.layer + 1) % LAYER_COUNT;
     Sleep(33); // 30Hz
   }
